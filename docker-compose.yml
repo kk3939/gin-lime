@@ -1,0 +1,28 @@
+version: '2'
+services:
+  api:
+    container_name: api
+    build:
+      context: ./
+      dockerfile: ./dockerfiles/api/Dockerfile
+    ports:
+      - "3000:3000"
+    tty: true
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    command: air -c .air.toml
+
+  db:
+    container_name: db
+    build:
+      context: ./
+      dockerfile: ./dockerfiles/db/Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: root_pass
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: todo
+      MYSQL_USER: test
+    ports:
+      - "3306:3306"
