@@ -1,2 +1,7 @@
 # gin-lime
-gin(Go) sample project
+This is gin(Go) sample project.
+
+These models are prepared in this project.
+
+- user
+- todo
