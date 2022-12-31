@@ -7,7 +7,8 @@ import (
 
 func GetTodos() (entity.ToDos, error) {
 	var todos entity.ToDos
-	result := db.Db.Find(&todos)
+	db := db.GetDB()
+	result := db.Find(&todos)
 	if err := result.Error; err != nil {
 		return nil, err
 	}
@@ -16,7 +17,8 @@ func GetTodos() (entity.ToDos, error) {
 
 func GetTodo(id string) (*entity.Todo, error) {
 	var todo entity.Todo
-	result := db.Db.First(&todo, "ID = ?", id)
+	db := db.GetDB()
+	result := db.First(&todo, "ID = ?", id)
 	if err := result.Error; err != nil {
 		return nil, err
 	}
@@ -24,7 +26,8 @@ func GetTodo(id string) (*entity.Todo, error) {
 }
 
 func CreateTodo(td entity.Todo) (*entity.Todo, error) {
-	result := db.Db.Create(&td)
+	db := db.GetDB()
+	result := db.Create(&td)
 	if err := result.Error; err != nil {
 		return nil, err
 	}
@@ -32,7 +35,8 @@ func CreateTodo(td entity.Todo) (*entity.Todo, error) {
 }
 
 func UpdateTodo(td entity.Todo) (*entity.Todo, error) {
-	result := db.Db.Save(&td)
+	db := db.GetDB()
+	result := db.Save(&td)
 	if err := result.Error; err != nil {
 		return nil, err
 	}
@@ -40,7 +44,8 @@ func UpdateTodo(td entity.Todo) (*entity.Todo, error) {
 }
 
 func DeleteTodo(td entity.Todo) error {
-	result := db.Db.Delete(&td)
+	db := db.GetDB()
+	result := db.Delete(&td)
 	if err := result.Error; err != nil {
 		return err
 	}

@@ -12,9 +12,17 @@ import (
 )
 
 var (
-	Db  *gorm.DB
+	db  *gorm.DB
 	err error
 )
+
+func GetDB() *gorm.DB {
+	return db
+}
+
+func SetDB(argDB *gorm.DB) {
+	db = argDB
+}
 
 func Connect(count int) {
 	err = godotenv.Load(".env")
@@ -23,9 +31,9 @@ func Connect(count int) {
 		panic(err)
 	}
 
-	up := fmt.Sprintf("%s:%s", os.Getenv("MYSQL_USER"), os.Getenv("MYSQL_PASSWORD"))
-	dsn := fmt.Sprintf("%s@tcp(db)/%s?charset=utf8mb4&parseTime=True&loc=Local", up, os.Getenv("MYSQL_DATABASE"))
-	Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	userPass := fmt.Sprintf("%s:%s", os.Getenv("MYSQL_USER"), os.Getenv("MYSQL_PASSWORD"))
+	dsn := fmt.Sprintf("%s@tcp(db)/%s?charset=utf8mb4&parseTime=True&loc=Local", userPass, os.Getenv("MYSQL_DATABASE"))
+	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	// If can not connect to mysql, retry.
 	if err != nil {
 		if count > 1 {
@@ -40,11 +48,11 @@ func Connect(count int) {
 }
 
 func Seeds() {
-	if t := Db.Migrator().HasTable(&entity.Todo{}); t {
+	if t := db.Migrator().HasTable(&entity.Todo{}); t {
 		fmt.Println("already Todo table exist. Seeds does not create table.")
 		return
 	}
-	if err := Db.Migrator().CreateTable(&entity.Todo{}); err != nil {
+	if err := db.Migrator().CreateTable(&entity.Todo{}); err != nil {
 		panic(err)
 	}
 	var todos entity.ToDos
@@ -54,6 +62,6 @@ func Seeds() {
 			Content: fmt.Sprintf("content_%d", i),
 		})
 	}
-	Db.Create(&todos)
+	db.Create(&todos)
 	fmt.Println("create ten todo data!")
 }
