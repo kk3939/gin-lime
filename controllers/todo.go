@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kk3939/gin-lime/entity"
@@ -32,7 +34,8 @@ func GetTodo(c *gin.Context) {
 }
 
 func CreateTodo(c *gin.Context) {
-	var todo entity.Todo
+	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
+	todo := entity.Todo{Id: uint(id), CreatedAt: time.Now()}
 	c.BindJSON(&todo)
 	err := models.CreateTodo(todo)
 	if err != nil {
@@ -45,7 +48,8 @@ func CreateTodo(c *gin.Context) {
 }
 
 func UpdateTodo(c *gin.Context) {
-	var todo entity.Todo
+	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
+	todo := entity.Todo{Id: uint(id), CreatedAt: time.Now()}
 	c.BindJSON(&todo)
 	err := models.UpdateTodo(todo)
 	if err != nil {
@@ -58,8 +62,8 @@ func UpdateTodo(c *gin.Context) {
 }
 
 func DeleteTodo(c *gin.Context) {
-	var todo entity.Todo
-	c.BindJSON(&todo)
+	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
+	todo := entity.Todo{Id: uint(id), CreatedAt: time.Now()}
 	err := models.DeleteTodo(todo)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
