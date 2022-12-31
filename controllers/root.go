@@ -8,6 +8,6 @@ import (
 
 func GetRoot(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
-		"message": "pong",
+		"message": "This is root endpoint.",
 	})
 }
