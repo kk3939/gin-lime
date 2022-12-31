@@ -3,6 +3,7 @@ module github.com/kk3939/gin-lime
 go 1.19
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/gin-gonic/gin v1.8.2
 	github.com/joho/godotenv v1.4.0
 	gorm.io/driver/mysql v1.4.4

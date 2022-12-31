@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/joho/godotenv"
 	"github.com/kk3939/gin-lime/entity"
 	"gorm.io/driver/mysql"
@@ -64,4 +65,13 @@ func Seeds() {
 	}
 	db.Create(&todos)
 	fmt.Println("create ten todo data!")
+}
+
+func Mock_DB() (*gorm.DB, sqlmock.Sqlmock, error) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		return nil, nil, err
+	}
+	gormDb, err := gorm.Open(mysql.Dialector{Config: &mysql.Config{DriverName: "mysql", Conn: db, SkipInitializeWithVersion: true}}, &gorm.Config{})
+	return gormDb, mock, err
 }

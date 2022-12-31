@@ -15,7 +15,7 @@ func GetTodos() (entity.ToDos, error) {
 	return todos, nil
 }
 
-func GetTodo(id string) (*entity.Todo, error) {
+func GetTodo(id int) (*entity.Todo, error) {
 	var todo entity.Todo
 	db := db.GetDB()
 	result := db.First(&todo, "Id = ?", id)
