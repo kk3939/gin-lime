@@ -26,3 +26,16 @@ services:
       MYSQL_USER: $MYSQL_USER
     ports:
       - "3306:3306"
+
+  db-test:
+    container_name: db-test
+    build:
+      context: ./
+      dockerfile: ./dockerfiles/db/Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: test_password
+      MYSQL_DATABASE: gin-lime-test
+      MYSQL_USER: test_user
+    ports:
+      - "3300:3306"

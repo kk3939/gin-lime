@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/DATA-DOG/go-txdb"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -58,4 +59,18 @@ func Mock_DB() (*gorm.DB, sqlmock.Sqlmock, error) {
 	}
 	gormDb, err := gorm.Open(mysql.Dialector{Config: &mysql.Config{DriverName: "mysql", Conn: db, SkipInitializeWithVersion: true}}, &gorm.Config{})
 	return gormDb, mock, err
+}
+
+func ConnectTestDB(name string) (*gorm.DB, error) {
+	userPass := fmt.Sprintf("%s:%s", "test_user", "test_password")
+	dsn := fmt.Sprintf("%s@tcp(db-test)/%s?charset=utf8mb4&parseTime=True&loc=Local", userPass, "gin-lime-test")
+	txdb.Register(name, "mysql", dsn)
+	dialector := mysql.New(mysql.Config{
+		DriverName: name,
+		DSN:        dsn,
+	})
+
+	return gorm.Open(dialector, &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
 }
