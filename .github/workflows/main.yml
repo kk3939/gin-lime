@@ -39,5 +39,5 @@ jobs:
         with:
           go-version: '^1.19.0'
       - run: |
-          docker-compose up -T
-          docker-compose exec api -T go test -v ./.../
+          docker-compose up
+          docker-compose exec -T api go test -v ./.../
