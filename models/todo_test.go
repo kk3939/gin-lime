@@ -74,3 +74,49 @@ func Test_createTodo(t *testing.T) {
 		t.Errorf("GetTodo is failed. %v", err)
 	}
 }
+
+func Test_updateToDo(t *testing.T) {
+	if _, _, err := db.Mock_DB(); err != nil {
+		t.Error("mock is failed")
+	}
+	mockDB, mock, _ := db.Mock_DB()
+	db.SetDB(mockDB)
+
+	todo := entity.Todo{
+		Id:      1,
+		Name:    "test_name",
+		Content: "test_content",
+	}
+	sql := "UPDATE `todos` SET `updated_at`=?,`name`=?,`content`=? WHERE `todos`.`deleted_at` IS NULL AND `id` = ?"
+	// https://github.com/DATA-DOG/go-sqlmock/issues/117
+	// https://github.com/DATA-DOG/go-sqlmock/issues/224
+	mock.ExpectBegin()
+	mock.ExpectExec(regexp.QuoteMeta(sql)).WithArgs(sqlmock.AnyArg(), todo.Name, todo.Content, todo.Id).WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+	if err := models.UpdateTodo(&todo); err != nil {
+		t.Errorf("GetTodo is failed. %v", err)
+	}
+}
+
+func Test_deleteToDo(t *testing.T) {
+	if _, _, err := db.Mock_DB(); err != nil {
+		t.Error("mock is failed")
+	}
+	mockDB, mock, _ := db.Mock_DB()
+	db.SetDB(mockDB)
+
+	todo := entity.Todo{
+		Id:      1,
+		Name:    "test_name",
+		Content: "test_content",
+	}
+	sql := "UPDATE `todos` SET `deleted_at`=? WHERE `todos`.`id` = ? AND `todos`.`deleted_at` IS NULL"
+	// https://github.com/DATA-DOG/go-sqlmock/issues/117
+	// https://github.com/DATA-DOG/go-sqlmock/issues/224
+	mock.ExpectBegin()
+	mock.ExpectExec(regexp.QuoteMeta(sql)).WithArgs(sqlmock.AnyArg(), todo.Id).WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+	if err := models.DeleteTodo(&todo); err != nil {
+		t.Errorf("GetTodo is failed. %v", err)
+	}
+}
