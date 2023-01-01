@@ -7,7 +7,6 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/joho/godotenv"
-	"github.com/kk3939/gin-lime/entity"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -36,7 +35,7 @@ func Connect(count int) {
 	userPass := fmt.Sprintf("%s:%s", os.Getenv("MYSQL_USER"), os.Getenv("MYSQL_PASSWORD"))
 	dsn := fmt.Sprintf("%s@tcp(db)/%s?charset=utf8mb4&parseTime=True&loc=Local", userPass, os.Getenv("MYSQL_DATABASE"))
 	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
-		// ? https://gorm.io/ja_JP/docs/logger.html
+		// https://gorm.io/ja_JP/docs/logger.html
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 	// If can not connect to mysql, retry.
@@ -50,25 +49,6 @@ func Connect(count int) {
 		}
 		panic(err)
 	}
-}
-
-func Seeds() {
-	if t := db.Migrator().HasTable(&entity.Todo{}); t {
-		fmt.Println("already Todo table exist. Seeds does not create table.")
-		return
-	}
-	if err := db.Migrator().CreateTable(&entity.Todo{}); err != nil {
-		panic(err)
-	}
-	var todos entity.ToDos
-	for i := 1; i <= 10; i++ {
-		todos = append(todos, entity.Todo{
-			Name:    fmt.Sprintf("name_%d", i),
-			Content: fmt.Sprintf("content_%d", i),
-		})
-	}
-	db.Create(&todos)
-	fmt.Println("create ten todo data!")
 }
 
 func Mock_DB() (*gorm.DB, sqlmock.Sqlmock, error) {

@@ -8,7 +8,8 @@ import (
 func main() {
 	rt := 30
 	db.Connect(rt)
-	db.Seeds()
+	var seeds db.Seeds
+	seeds.ToDo()
 	r := server.GetRouter()
 	r.Run(":3000")
 }
