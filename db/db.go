@@ -10,6 +10,7 @@ import (
 	"github.com/kk3939/gin-lime/entity"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var (
@@ -34,7 +35,10 @@ func Connect(count int) {
 
 	userPass := fmt.Sprintf("%s:%s", os.Getenv("MYSQL_USER"), os.Getenv("MYSQL_PASSWORD"))
 	dsn := fmt.Sprintf("%s@tcp(db)/%s?charset=utf8mb4&parseTime=True&loc=Local", userPass, os.Getenv("MYSQL_DATABASE"))
-	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+		// ? https://gorm.io/ja_JP/docs/logger.html
+		Logger: logger.Default.LogMode(logger.Info),
+	})
 	// If can not connect to mysql, retry.
 	if err != nil {
 		if count > 1 {
