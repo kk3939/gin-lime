@@ -25,25 +25,25 @@ func GetTodo(id string) (*entity.Todo, error) {
 	return &todo, nil
 }
 
-func CreateTodo(td entity.Todo) error {
+func CreateTodo(td *entity.Todo) error {
 	db := db.GetDB()
-	result := db.Create(&td)
+	result := db.Select("Name", "Content").Create(&td)
 	if err := result.Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func UpdateTodo(td entity.Todo) error {
+func UpdateTodo(td *entity.Todo) error {
 	db := db.GetDB()
-	result := db.Save(&td)
+	result := db.Model(&td).Updates(entity.Todo{Name: td.Name, Content: td.Content})
 	if err := result.Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func DeleteTodo(td entity.Todo) error {
+func DeleteTodo(td *entity.Todo) error {
 	db := db.GetDB()
 	result := db.Delete(&td)
 	if err := result.Error; err != nil {

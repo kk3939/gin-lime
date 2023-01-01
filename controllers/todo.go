@@ -2,8 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kk3939/gin-lime/entity"
@@ -34,10 +32,9 @@ func GetTodo(c *gin.Context) {
 }
 
 func CreateTodo(c *gin.Context) {
-	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
-	todo := entity.Todo{Id: uint(id), CreatedAt: time.Now()}
+	todo := entity.Todo{}
 	c.BindJSON(&todo)
-	err := models.CreateTodo(todo)
+	err := models.CreateTodo(&todo)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": fmtErrMsg(err),
@@ -48,28 +45,41 @@ func CreateTodo(c *gin.Context) {
 }
 
 func UpdateTodo(c *gin.Context) {
-	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
-	todo := entity.Todo{Id: uint(id), CreatedAt: time.Now()}
-	c.BindJSON(&todo)
-	err := models.UpdateTodo(todo)
-	if err != nil {
+	if todoGot, err := models.GetTodo(c.Param("id")); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": fmtErrMsg(err),
 		})
 		return
+	} else {
+		todo := entity.Todo{}
+		c.BindJSON(&todo)
+		todo.Id = todoGot.Id
+		if err := models.UpdateTodo(&todo); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"message": fmtErrMsg(err),
+			})
+			return
+		}
+		c.JSON(http.StatusOK, todo)
 	}
-	c.JSON(http.StatusOK, todo)
+
 }
 
 func DeleteTodo(c *gin.Context) {
-	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
-	todo := entity.Todo{Id: uint(id), CreatedAt: time.Now()}
-	err := models.DeleteTodo(todo)
-	if err != nil {
+	if todoGot, err := models.GetTodo(c.Param("id")); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": fmtErrMsg(err),
 		})
 		return
+	} else {
+		todo := entity.Todo{}
+		todo.Id = todoGot.Id
+		if err := models.DeleteTodo(&todo); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"message": fmtErrMsg(err),
+			})
+			return
+		}
+		c.JSON(http.StatusOK, todo)
 	}
-	c.JSON(http.StatusOK, todo)
 }
