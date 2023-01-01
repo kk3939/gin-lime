@@ -24,7 +24,7 @@ func Test_getTodos(t *testing.T) {
 			"Content",
 		}))
 	if _, err := models.GetTodos(); err != nil {
-		t.Errorf("GetTodos is failed. %v", err)
+		t.Error(err)
 	}
 }
 
@@ -48,7 +48,7 @@ func Test_getTodo(t *testing.T) {
 			"Content",
 		}).AddRow(1, "test_name", "test_content"))
 	if _, err := models.GetTodo("1"); err != nil {
-		t.Errorf("GetTodo is failed. %v", err)
+		t.Error(err)
 	}
 }
 
@@ -71,7 +71,7 @@ func Test_createTodo(t *testing.T) {
 	mock.ExpectExec(regexp.QuoteMeta(sql)).WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), todo.Name, todo.Content).WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 	if err := models.CreateTodo(&todo); err != nil {
-		t.Errorf("GetTodo is failed. %v", err)
+		t.Error(err)
 	}
 }
 
@@ -94,7 +94,7 @@ func Test_updateToDo(t *testing.T) {
 	mock.ExpectExec(regexp.QuoteMeta(sql)).WithArgs(sqlmock.AnyArg(), todo.Name, todo.Content, todo.Id).WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 	if err := models.UpdateTodo(&todo); err != nil {
-		t.Errorf("GetTodo is failed. %v", err)
+		t.Error(err)
 	}
 }
 
@@ -117,6 +117,6 @@ func Test_deleteToDo(t *testing.T) {
 	mock.ExpectExec(regexp.QuoteMeta(sql)).WithArgs(sqlmock.AnyArg(), todo.Id).WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 	if err := models.DeleteTodo(&todo); err != nil {
-		t.Errorf("GetTodo is failed. %v", err)
+		t.Error(err)
 	}
 }
