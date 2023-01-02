@@ -25,8 +25,11 @@ func SetDB(argDB *gorm.DB) {
 }
 
 func Connect(count int) {
-	userPass := fmt.Sprintf("%s:%s", os.Getenv("MYSQL_USER"), os.Getenv("MYSQL_PASSWORD"))
-	dsn := fmt.Sprintf("%s@tcp(db)/%s?charset=utf8mb4&parseTime=True&loc=Local", userPass, os.Getenv("MYSQL_DATABASE"))
+	dsn := fmt.Sprintf(
+		"%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		os.Getenv("MYSQL_USER"), os.Getenv("MYSQL_PASSWORD"),
+		os.Getenv("MYSQL_HOST"), os.Getenv("MYSQL_DATABASE"),
+	)
 	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		// https://gorm.io/ja_JP/docs/logger.html
 		Logger: logger.Default.LogMode(logger.Info),
