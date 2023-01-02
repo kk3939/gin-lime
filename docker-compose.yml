@@ -9,6 +9,10 @@ services:
       - "3000:3000"
     volumes:
       - .:/app
+    environment:
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
     depends_on:
       - db
     command: air -c .air.toml
@@ -19,9 +23,9 @@ services:
       context: ./
       dockerfile: ./dockerfiles/db/Dockerfile
     environment:
-      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
-      MYSQL_PASSWORD: $MYSQL_PASSWORD
-      MYSQL_DATABASE: $MYSQL_DATABASE
-      MYSQL_USER: $MYSQL_USER
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
     ports:
       - "3306:3306"

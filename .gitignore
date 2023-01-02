@@ -17,3 +17,5 @@
 .DS_Store
 tmp/
 .env
+.env.local
+.env.prod
