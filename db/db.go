@@ -40,6 +40,7 @@ func Connect(count int) {
 			Connect(count)
 			return
 		}
+
 		panic(err)
 	}
 }
