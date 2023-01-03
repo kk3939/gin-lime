@@ -13,7 +13,7 @@ import (
 
 func Test_getTodos(t *testing.T) {
 	if _, _, err := db.Mock_DB(); err != nil {
-		t.Error("mock is failed")
+		t.Errorf("Mocking database is failed. %v", err)
 	}
 	mockDB, mock, _ := db.Mock_DB()
 	db.SetDB(mockDB)
@@ -30,7 +30,7 @@ func Test_getTodos(t *testing.T) {
 
 func Test_getTodo(t *testing.T) {
 	if _, _, err := db.Mock_DB(); err != nil {
-		t.Error("mock is failed")
+		t.Errorf("Mocking database is failed. %v", err)
 	}
 	mockDB, mock, _ := db.Mock_DB()
 	db.SetDB(mockDB)
@@ -54,7 +54,7 @@ func Test_getTodo(t *testing.T) {
 
 func Test_createTodo(t *testing.T) {
 	if _, _, err := db.Mock_DB(); err != nil {
-		t.Error("mock is failed")
+		t.Errorf("Mocking database is failed. %v", err)
 	}
 	mockDB, mock, _ := db.Mock_DB()
 	db.SetDB(mockDB)
@@ -77,7 +77,7 @@ func Test_createTodo(t *testing.T) {
 
 func Test_updateToDo(t *testing.T) {
 	if _, _, err := db.Mock_DB(); err != nil {
-		t.Error("mock is failed")
+		t.Errorf("Mocking database is failed. %v", err)
 	}
 	mockDB, mock, _ := db.Mock_DB()
 	db.SetDB(mockDB)
@@ -100,7 +100,7 @@ func Test_updateToDo(t *testing.T) {
 
 func Test_deleteToDo(t *testing.T) {
 	if _, _, err := db.Mock_DB(); err != nil {
-		t.Error("mock is failed")
+		t.Errorf("Mocking database is failed. %v", err)
 	}
 	mockDB, mock, _ := db.Mock_DB()
 	db.SetDB(mockDB)
