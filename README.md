@@ -10,3 +10,5 @@ I am going to implement the following things.
 - Users (router, entitty, model, controller, table, seed, testing)
 - Authentication(middleware)
 
+## License
+MIT
