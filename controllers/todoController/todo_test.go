@@ -39,10 +39,10 @@ func Test_getTodos(t *testing.T) {
 			}).AddRow(test.Id, test.Name, test.Content))
 	})
 
-	t.Run("Request GET /todo", func(t *testing.T) {
+	t.Run("Request GET /api/v1/todo", func(t *testing.T) {
 		r := server.GetRouter()
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/todo", nil)
+		req, _ := http.NewRequest("GET", "/api/v1/todo", nil)
 		r.ServeHTTP(w, req)
 
 		if w.Code != http.StatusOK {
@@ -94,10 +94,10 @@ func Test_getTodo(t *testing.T) {
 			}).AddRow(test.Id, test.Name, test.Content))
 	})
 
-	t.Run("Request GET /todo/1", func(t *testing.T) {
+	t.Run("Request GET /api/v1/todo/1", func(t *testing.T) {
 		r := server.GetRouter()
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/todo/1", nil)
+		req, _ := http.NewRequest("GET", "/api/v1/todo/1", nil)
 		r.ServeHTTP(w, req)
 
 		if w.Code != http.StatusOK {
@@ -146,7 +146,7 @@ func Test_createTodo(t *testing.T) {
 		mock.ExpectCommit()
 	})
 
-	t.Run("Request POST /todo", func(t *testing.T) {
+	t.Run("Request POST /api/v1/todo", func(t *testing.T) {
 		r := server.GetRouter()
 		w := httptest.NewRecorder()
 		type RequestBody struct {
@@ -160,7 +160,7 @@ func Test_createTodo(t *testing.T) {
 		if data, err := json.Marshal(rqb); err != nil {
 			t.Errorf("Can not marshal json. %v", err)
 		} else {
-			req, _ := http.NewRequest("POST", "/todo", bytes.NewBuffer(data))
+			req, _ := http.NewRequest("POST", "/api/v1/todo", bytes.NewBuffer(data))
 			r.ServeHTTP(w, req)
 		}
 
@@ -220,7 +220,7 @@ func Test_updateTodo(t *testing.T) {
 		mock.ExpectCommit()
 	})
 
-	t.Run("Request PUT /todo/1", func(t *testing.T) {
+	t.Run("Request PUT /api/v1/todo/1", func(t *testing.T) {
 		r := server.GetRouter()
 		w := httptest.NewRecorder()
 		type Rq struct {
@@ -234,7 +234,7 @@ func Test_updateTodo(t *testing.T) {
 		if data, err := json.Marshal(rqb); err != nil {
 			t.Errorf("Can not marshal json. %v", err)
 		} else {
-			req, _ := http.NewRequest("PUT", "/todo/1", bytes.NewBuffer(data))
+			req, _ := http.NewRequest("PUT", "/api/v1/todo/1", bytes.NewBuffer(data))
 			r.ServeHTTP(w, req)
 		}
 
@@ -295,10 +295,10 @@ func Test_deleteTodo(t *testing.T) {
 		mock.ExpectCommit()
 	})
 
-	t.Run("Request DELETE /todo/1", func(t *testing.T) {
+	t.Run("Request DELETE /api/v1/todo/1", func(t *testing.T) {
 		r := server.GetRouter()
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("DELETE", "/todo/1", nil)
+		req, _ := http.NewRequest("DELETE", "/api/v1/todo/1", nil)
 		r.ServeHTTP(w, req)
 
 		if w.Code != http.StatusOK {

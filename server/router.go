@@ -12,17 +12,17 @@ func GetRouter() *gin.Engine {
 	// root
 	r.GET("/", controllers.GetRoot)
 	// todo
-	r.GET("/todo", todoController.GetTodos)
-	r.GET("/todo/:id", todoController.GetTodo)
-	r.POST("/todo", todoController.CreateTodo)
-	r.PUT("/todo/:id", todoController.UpdateTodo)
-	r.DELETE("/todo/:id", todoController.DeleteTodo)
+	r.GET("/api/v1/todo", todoController.GetTodos)
+	r.GET("/api/v1/todo/:id", todoController.GetTodo)
+	r.POST("/api/v1/todo", todoController.CreateTodo)
+	r.PUT("/api/v1/todo/:id", todoController.UpdateTodo)
+	r.DELETE("/api/v1/todo/:id", todoController.DeleteTodo)
 	// user
-	r.GET("/user", userController.GetUsers)
-	r.GET("/user/:id", userController.GetUser)
-	r.POST("/user", userController.CreateUser)
-	r.PUT("/user/:id", userController.UpdateUser)
-	r.DELETE("/user/:id", userController.DeleteUser)
+	r.GET("/api/v1/user", userController.GetUsers)
+	r.GET("/api/v1/user/:id", userController.GetUser)
+	r.POST("/api/v1/user", userController.CreateUser)
+	r.PUT("/api/v1/user/:id", userController.UpdateUser)
+	r.DELETE("/api/v1/user/:id", userController.DeleteUser)
 
 	return r
 }
