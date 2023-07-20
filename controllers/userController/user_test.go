@@ -39,10 +39,10 @@ func Test_getUsers(t *testing.T) {
 			}).AddRow(mock_user.Id, mock_user.Email, mock_user.Password))
 	})
 
-	t.Run("Request GET /user", func(t *testing.T) {
+	t.Run("Request GET /api/v1/user", func(t *testing.T) {
 		r := server.GetRouter()
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/user", nil)
+		req, _ := http.NewRequest("GET", "/api/v1/user", nil)
 		r.ServeHTTP(w, req)
 
 		if w.Code != http.StatusOK {
@@ -94,10 +94,10 @@ func Test_getUser(t *testing.T) {
 			}).AddRow(mock_user.Id, mock_user.Email, mock_user.Password))
 	})
 
-	t.Run("Request GET /user/1", func(t *testing.T) {
+	t.Run("Request GET /api/v1/user/1", func(t *testing.T) {
 		r := server.GetRouter()
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/user/1", nil)
+		req, _ := http.NewRequest("GET", "/api/v1/user/1", nil)
 		r.ServeHTTP(w, req)
 
 		if w.Code != http.StatusOK {
@@ -146,7 +146,7 @@ func Test_createUser(t *testing.T) {
 		mock.ExpectCommit()
 	})
 
-	t.Run("Request POST /user", func(t *testing.T) {
+	t.Run("Request POST /api/v1/user", func(t *testing.T) {
 		r := server.GetRouter()
 		w := httptest.NewRecorder()
 		type RequestBody struct {
@@ -160,7 +160,7 @@ func Test_createUser(t *testing.T) {
 		if data, err := json.Marshal(rqb); err != nil {
 			t.Errorf("Can not marshal json. %v", err)
 		} else {
-			req, _ := http.NewRequest("POST", "/user", bytes.NewBuffer(data))
+			req, _ := http.NewRequest("POST", "/api/v1/user", bytes.NewBuffer(data))
 			r.ServeHTTP(w, req)
 		}
 
@@ -220,7 +220,7 @@ func Test_updateUser(t *testing.T) {
 		mock.ExpectCommit()
 	})
 
-	t.Run("Request PUT /user/1", func(t *testing.T) {
+	t.Run("Request PUT /api/v1/user/1", func(t *testing.T) {
 		r := server.GetRouter()
 		w := httptest.NewRecorder()
 		type Rq struct {
@@ -234,7 +234,7 @@ func Test_updateUser(t *testing.T) {
 		if data, err := json.Marshal(rqb); err != nil {
 			t.Errorf("Can not marshal json. %v", err)
 		} else {
-			req, _ := http.NewRequest("PUT", "/user/1", bytes.NewBuffer(data))
+			req, _ := http.NewRequest("PUT", "/api/v1/user/1", bytes.NewBuffer(data))
 			r.ServeHTTP(w, req)
 		}
 
@@ -295,10 +295,10 @@ func Test_deleteUser(t *testing.T) {
 		mock.ExpectCommit()
 	})
 
-	t.Run("Request DELETE /user/1", func(t *testing.T) {
+	t.Run("Request DELETE /api/v1/user/1", func(t *testing.T) {
 		r := server.GetRouter()
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("DELETE", "/user/1", nil)
+		req, _ := http.NewRequest("DELETE", "/api/v1/user/1", nil)
 		r.ServeHTTP(w, req)
 
 		if w.Code != http.StatusOK {
