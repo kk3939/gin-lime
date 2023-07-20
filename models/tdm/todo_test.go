@@ -1,4 +1,4 @@
-package models_test
+package tdm_test
 
 import (
 	"regexp"
@@ -8,7 +8,8 @@ import (
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/kk3939/gin-lime/db"
 	"github.com/kk3939/gin-lime/entity"
-	"github.com/kk3939/gin-lime/models"
+
+	"github.com/kk3939/gin-lime/models/tdm"
 )
 
 func Test_getTodos(t *testing.T) {
@@ -23,7 +24,7 @@ func Test_getTodos(t *testing.T) {
 			"Name",
 			"Content",
 		}))
-	if _, err := models.GetTodos(); err != nil {
+	if _, err := tdm.GetTodos(); err != nil {
 		t.Error(err)
 	}
 }
@@ -47,7 +48,7 @@ func Test_getTodo(t *testing.T) {
 			"Name",
 			"Content",
 		}).AddRow(1, "test_name", "test_content"))
-	if _, err := models.GetTodo("1"); err != nil {
+	if _, err := tdm.GetTodo("1"); err != nil {
 		t.Error(err)
 	}
 }
@@ -70,7 +71,7 @@ func Test_createTodo(t *testing.T) {
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(sql)).WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), todo.Name, todo.Content).WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
-	if err := models.CreateTodo(&todo); err != nil {
+	if err := tdm.CreateTodo(&todo); err != nil {
 		t.Error(err)
 	}
 }
@@ -93,7 +94,7 @@ func Test_updateToDo(t *testing.T) {
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(sql)).WithArgs(sqlmock.AnyArg(), todo.Name, todo.Content, todo.Id).WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
-	if err := models.UpdateTodo(&todo); err != nil {
+	if err := tdm.UpdateTodo(&todo); err != nil {
 		t.Error(err)
 	}
 }
@@ -116,7 +117,7 @@ func Test_deleteToDo(t *testing.T) {
 	mock.ExpectBegin()
 	mock.ExpectExec(regexp.QuoteMeta(sql)).WithArgs(sqlmock.AnyArg(), todo.Id).WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
-	if err := models.DeleteTodo(&todo); err != nil {
+	if err := tdm.DeleteTodo(&todo); err != nil {
 		t.Error(err)
 	}
 }

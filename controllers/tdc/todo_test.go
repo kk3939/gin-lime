@@ -1,4 +1,4 @@
-package controllers_test
+package tdc_test
 
 import (
 	"bytes"
