@@ -1,4 +1,4 @@
-package tdm
+package todoModel
 
 import (
 	"github.com/kk3939/gin-lime/db"

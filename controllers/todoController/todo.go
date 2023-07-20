@@ -1,4 +1,4 @@
-package tdc
+package todoController
 
 import (
 	"net/http"
@@ -6,11 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/kk3939/gin-lime/controllers"
 	"github.com/kk3939/gin-lime/entity"
-	"github.com/kk3939/gin-lime/models/tdm"
+	"github.com/kk3939/gin-lime/models/todoModel"
 )
 
 func GetTodos(c *gin.Context) {
-	todos, err := tdm.GetTodos()
+	todos, err := todoModel.GetTodos()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": controllers.FmtErrMsg(err),
@@ -22,7 +22,7 @@ func GetTodos(c *gin.Context) {
 
 func GetTodo(c *gin.Context) {
 	id := c.Param("id")
-	todo, err := tdm.GetTodo(id)
+	todo, err := todoModel.GetTodo(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": controllers.FmtErrMsg(err),
@@ -35,7 +35,7 @@ func GetTodo(c *gin.Context) {
 func CreateTodo(c *gin.Context) {
 	todo := entity.Todo{}
 	c.BindJSON(&todo)
-	err := tdm.CreateTodo(&todo)
+	err := todoModel.CreateTodo(&todo)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": controllers.FmtErrMsg(err),
@@ -46,7 +46,7 @@ func CreateTodo(c *gin.Context) {
 }
 
 func UpdateTodo(c *gin.Context) {
-	if todoGot, err := tdm.GetTodo(c.Param("id")); err != nil {
+	if todoGot, err := todoModel.GetTodo(c.Param("id")); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": controllers.FmtErrMsg(err),
 		})
@@ -55,7 +55,7 @@ func UpdateTodo(c *gin.Context) {
 		todo := entity.Todo{}
 		c.BindJSON(&todo)
 		todo.Id = todoGot.Id
-		if err := tdm.UpdateTodo(&todo); err != nil {
+		if err := todoModel.UpdateTodo(&todo); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"message": controllers.FmtErrMsg(err),
 			})
@@ -67,7 +67,7 @@ func UpdateTodo(c *gin.Context) {
 }
 
 func DeleteTodo(c *gin.Context) {
-	if todoGot, err := tdm.GetTodo(c.Param("id")); err != nil {
+	if todoGot, err := todoModel.GetTodo(c.Param("id")); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": controllers.FmtErrMsg(err),
 		})
@@ -75,7 +75,7 @@ func DeleteTodo(c *gin.Context) {
 	} else {
 		todo := entity.Todo{}
 		todo.Id = todoGot.Id
-		if err := tdm.DeleteTodo(&todo); err != nil {
+		if err := todoModel.DeleteTodo(&todo); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"message": controllers.FmtErrMsg(err),
 			})
