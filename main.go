@@ -15,6 +15,7 @@ func main() {
 		fmt.Println("This is local env.")
 		var seeds db.Seeds
 		seeds.ToDo()
+		seeds.User()
 	} else if os.Getenv("APP_ENV") == "dev" {
 		fmt.Println("This is staging env.")
 	} else if os.Getenv("APP_ENV") == "prod" {
