@@ -1,4 +1,4 @@
-package models
+package tdm
 
 import (
 	"github.com/kk3939/gin-lime/db"
