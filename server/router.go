@@ -5,10 +5,17 @@ import (
 	"github.com/kk3939/gin-lime/controllers"
 	"github.com/kk3939/gin-lime/controllers/todoController"
 	"github.com/kk3939/gin-lime/controllers/userController"
+	"github.com/kk3939/gin-lime/middleware"
 )
 
 func GetRouter() *gin.Engine {
 	r := gin.Default()
+	authMiddleware, err := middleware.AuthMiddleware()
+	if err != nil {
+		panic("JWT Error:" + err.Error())
+	}
+	r.POST("/login", authMiddleware.LoginHandler)
+
 	// root
 	r.GET("/", controllers.GetRoot)
 	// todo
