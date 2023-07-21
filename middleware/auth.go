@@ -14,15 +14,14 @@ type login struct {
 	Password string `form:"password" json:"password" binding:"required"`
 }
 
-// sample data
+// sample key
 var identityKey = "id"
 
 func HelloHandler(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
-	user, _ := c.Get(identityKey)
 	c.JSON(200, gin.H{
 		"ID":      claims[identityKey],
-		"Email":   user.(*entity.User).Email,
+		"Email":   claims["email"],
 		"massage": "Hello World.",
 	})
 }
@@ -32,22 +31,17 @@ func AuthMiddleware() (*jwt.GinJWTMiddleware, error) {
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       "test zone",
 		Key:         []byte("secret key"),
-		Timeout:     time.Hour,
-		MaxRefresh:  time.Hour,
+		Timeout:     time.Hour * 24,
+		MaxRefresh:  time.Hour * 24 * 7,
 		IdentityKey: identityKey,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(*entity.User); ok {
 				return jwt.MapClaims{
 					identityKey: v.Id,
+					"email":     v.Email,
 				}
 			}
 			return jwt.MapClaims{}
-		},
-		IdentityHandler: func(c *gin.Context) interface{} {
-			claims := jwt.ExtractClaims(c)
-			return &entity.User{
-				Id: claims[identityKey].(uint),
-			}
 		},
 		// login prosecess
 		Authenticator: func(c *gin.Context) (interface{}, error) {
@@ -69,23 +63,9 @@ func AuthMiddleware() (*jwt.GinJWTMiddleware, error) {
 				"message": message,
 			})
 		},
-		// TokenLookup is a string in the form of "<source>:<name>" that is used
-		// to extract token from the request.
-		// Optional. Default value "header:Authorization".
-		// Possible values:
-		// - "header:<name>"
-		// - "query:<name>"
-		// - "cookie:<name>"
-		// - "param:<name>"
-		TokenLookup: "header: Authorization, query: token, cookie: jwt",
-		// TokenLookup: "query:token",
-		// TokenLookup: "cookie:token",
-
-		// TokenHeadName is a string in the header. Default value is "Bearer"
+		TokenLookup:   "header: Authorization, query: token, cookie: jwt",
 		TokenHeadName: "Bearer",
-
-		// TimeFunc provides the current time. You can override it to use another time value. This is useful for testing or if your server uses a different time zone than your tokens.
-		TimeFunc: time.Now,
+		TimeFunc:      time.Now,
 	})
 	return authMiddleware, err
 }
