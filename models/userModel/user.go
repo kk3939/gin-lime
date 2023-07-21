@@ -15,6 +15,16 @@ func GetUsers() (entity.Users, error) {
 	return users, nil
 }
 
+func GetUserByEmailPassword(email string, password string) (*entity.User, error) {
+	var user entity.User
+	db := db.GetDB()
+	result := db.Where(&entity.User{Email: email, Password: password}).First(&user)
+	if err := result.Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 func GetUser(id string) (*entity.User, error) {
 	var user entity.User
 	db := db.GetDB()
