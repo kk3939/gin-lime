@@ -6,6 +6,7 @@ import (
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/kk3939/gin-lime/entity"
+	"github.com/kk3939/gin-lime/models/userModel"
 )
 
 type login struct {
@@ -56,17 +57,11 @@ func AuthMiddleware() (*jwt.GinJWTMiddleware, error) {
 			}
 			email := loginVals.Email
 			password := loginVals.Password
-			// TODO: check email and password from DB
-			// sample data
-			if email == "email@example.com" && password == "password" {
-				return &entity.User{
-					// TODO: return user id from DB
-					Email:    email,
-					Password: password,
-				}, nil
+			if user, err := userModel.GetUserByEmailPassword(email, password); err != nil {
+				return nil, jwt.ErrFailedAuthentication
+			} else {
+				return user, nil
 			}
-
-			return nil, jwt.ErrFailedAuthentication
 		},
 		Unauthorized: func(c *gin.Context, code int, message string) {
 			c.JSON(code, gin.H{
